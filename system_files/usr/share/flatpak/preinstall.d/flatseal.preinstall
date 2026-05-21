@@ -1,0 +1,4 @@
+[Flatpak Preinstall com.github.tchx84.Flatseal]
+Branch=stable
+IsRuntime=false
+CollectionID=org.flathub.Stable
