@@ -1,5 +1,16 @@
 # .bashrc
 
+# History
+shopt -s histappend
+export HISTCONTROL=ignoreboth
+export HISTIGNORE="ll:lla:exit:history"
+export HISTTIMEFORMAT="%F %T - "
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+
+# Better hisotry sync between sessions
+PROMPT_COMMAND="history -a; history -n${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
@@ -23,6 +34,7 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
+# Some aliases
 alias ..="cd .."
 alias ...="cd ../.."
 alias ls="ls --color=auto"
