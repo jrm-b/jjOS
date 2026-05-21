@@ -1,9 +1,11 @@
-export image_name := env("IMAGE_NAME", "jjOS") # output image name, usually same as repo name, change as needed
+export image_name := env("IMAGE_NAME", "jjos") # output image name, usually same as repo name, change as needed
+export image_name_styled := "jjOS"
 export default_tag := env("DEFAULT_TAG", "latest")
 export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
 
 img := "localhost/" + image_name
 tag := default_tag
+fedora_version := "44"
 
 alias build-vm := build-qcow2
 alias rebuild-vm := rebuild-qcow2
@@ -96,6 +98,12 @@ build $image=image_name $tag=tag:
     if [[ -z "$(git status -s)" ]]; then
         BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=$(git rev-parse --short HEAD)")
     fi
+
+    VERSION="{{ image }}-${fedora_version}.$(date +%Y%m%d)"
+
+    BUILD_ARGS+=("--label" "org.opencontainers.image.title={{ image_name_styled }}")
+    BUILD_ARGS+=("--label" "org.opencontainers.image.version=$VERSION")
+    BUILD_ARGS+=("--label" "org.opencontainers.image.description={{ image_name_styled }} is my personal opiniated OCI image built from fedora atomic desktop (cosmic)")
 
     podman build \
         "${BUILD_ARGS[@]}" \
@@ -296,6 +304,18 @@ spawn-vm rebuild="0" type="qcow2" ram="6G":
       --vsock=false --pass-ssh-key=false \
       -i ./output/**/*.{{ type }}
 
+
+# Build an interactive ISO (full Anaconda UI - disk and user configuration)
+[group('Build Virtal Machine Image')]
+build-interactive-iso $image=img $tag=tag: && (_build-bib image tag "iso" "disk_config/interactive.toml")
+
+# Rebuild an interactive ISO (full Anaconda UI - disk and user configuration)
+[group('Build Virtal Machine Image')]
+rebuild-interactive-iso $image=img $tag=tag: && (_rebuild-bib image tag "iso" "disk_config/interactive.toml")
+
+# Run a virtual machine from an interactive ISO
+[group('Run Virtal Machine')]
+run-vm-interactive-iso $image=img $tag=tag: && (_run-vm image tag "iso" "disk_config/interactive.toml")
 
 # Runs shell check on all Bash scripts
 lint:
