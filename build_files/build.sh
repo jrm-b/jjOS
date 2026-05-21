@@ -10,5 +10,13 @@ source "${UTILS_FILEPATH}" && log DEBUG "${UTILS_FILEPATH} successfully loaded"
 # shellcheck source=build_files/packages.sh
 source "${SCRIPT_DIR}/packages.sh"
 
+# Enable VSCode extensions autoinstall on first user session
+if systemctl --global enable vscode-extensions.service; then
+	log INFO "Systemd vscode-extensions.service enabled"
+else
+	log ERROR "Cannot enable vscode-extensions.service"
+	exit 1
+fi
+
 # Cleanup
 # source "${SCRIPT_DIR}/cleanup.sh"

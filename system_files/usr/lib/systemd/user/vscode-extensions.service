@@ -1,0 +1,17 @@
+[Unit]
+Description=Install VSCode extensions on first login
+ConditionPathExists=!%h/.local/share/.vscode-extensions-installed
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '\
+  code --install-extension ms-vscode-remote.remote-containers \
+       --install-extension ms-vscode-remote.remote-ssh \
+       --install-extension yzhang.markdown-all-in-one \
+       --install-extension esbenp.prettier-vscode && \
+  mkdir -p ~/.local/share && \
+  touch ~/.local/share/.vscode-extensions-installed'
+
+[Install]
+WantedBy=graphical-session.target
