@@ -28,6 +28,6 @@ eval "$(starship init bash)"
 eval "$(mise activate bash)"
 
 # Rust
-if  ! [[ "${PATH}" =~ "${HOME}/.cargo/bin:"]]; then
+if  ! [[ "${PATH}" =~ "${HOME}/.cargo/bin:" ]]; then
     export PATH="${HOME}/.cargo/bin:${PATH}"
 fi
