@@ -23,6 +23,12 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
+alias ..="cd .."
+alias ...="cd ../.."
+alias ls="ls --color=auto"
+alias ll="ls --group-directories-first -lhv"
+alias lla="ls --group-directories-first -lAhv"
+
 # Starship & mise
 eval "$(starship init bash)"
 eval "$(mise activate bash)"
