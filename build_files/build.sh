@@ -19,4 +19,5 @@ else
 fi
 
 # Cleanup
-# source "${SCRIPT_DIR}/cleanup.sh"
+# shellcheck source=build_files/cleanup.sh
+source "${SCRIPT_DIR}/cleanup.sh"
