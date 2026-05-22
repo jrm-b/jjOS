@@ -35,7 +35,7 @@ FEDORA_PACKAGES=(
 log INFO "Installing ${FEDORA_PACKAGES[*]} from fedora repository (official)"
 
 if ! command -v dnf5 &>/dev/null; then
-	log ERROR "Missing dnf5 dependency for copr_install_isolated"
+	log ERROR "Missing dnf5 package manager"
 	return 1
 fi
 
@@ -47,6 +47,9 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 copr_install_isolated "jdxcode/mise" "mise"
 copr_install_isolated "atim/starship" "starship"
 copr_install_isolated "scottames/ghostty" "ghostty"
+
+log INFO "Installing code from vscode repository"
+dnf5 -y install --enable-repo=vscode code
 
 EXCLUDED_PACKAGES=(
 	cosign
@@ -74,3 +77,4 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 		log INFO "No excluded packages found to remove."
 	fi
 fi
+
